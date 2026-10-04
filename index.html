@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>~ lofi vibes ~</title>
+    <!-- Google Fonts for cute typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ffd1dc, #ffccd5, #e2ece9, #dfedf5);
+            background-size: 400% 400%;
+            animation: gradientBG 12s ease infinite;
+            font-family: 'Quicksand', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            padding: 40px 30px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 182, 193, 0.3);
+            text-align: center;
+            width: 320px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .vinyl {
+            width: 120px;
+            height: 120px;
+            background: #222;
+            border-radius: 50%;
+            margin: 0 auto 25px auto;
+            position: relative;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 4px solid #fff;
+        }
+
+        .vinyl-inner {
+            width: 40px;
+            height: 40px;
+            background: #ffb7b2;
+            border-radius: 50%;
+            border: 3px dashed #fff;
+        }
+
+        .spinning {
+            animation: spin 4s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        h1 {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        p {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 25px;
+        }
+
+        .play-btn {
+            background-color: #ffb7b2;
+            color: #fff;
+            border: none;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            cursor: pointer;
+            box-shadow: 0 6px 15px rgba(255, 183, 178, 0.5);
+            transition: all 0.2s ease;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .play-btn:hover {
+            background-color: #ff9aa2;
+            transform: scale(1.08);
+        }
+
+        .play-btn:active {
+            transform: scale(0.95);
+        }
+
+        .sparkle {
+            position: absolute;
+            font-size: 1.2rem;
+            animation: float 3s ease-in-out infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(15deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <!-- Cute spinning vinyl art -->
+        <div class="vinyl" id="vinylDisc">
+            <div class="vinyl-inner"></div>
+        </div>
+
+        <h1>song1.mp3</h1>
+        <p>tap to play ✨</p>
+
+        <!-- Play/Pause Button -->
+        <button class="play-btn" id="playBtn" onclick="togglePlay()">
+            ▶
+        </button>
+
+        <!-- Audio Element -->
+        <audio id="audioPlayer" src="song1.mp3" preload="auto" loop></audio>
+    </div>
+
+    <script>
+        const audio = document.getElementById('audioPlayer');
+        const playBtn = document.getElementById('playBtn');
+        const vinyl = document.getElementById('vinylDisc');
+
+        function togglePlay() {
+            if (audio.paused) {
+                audio.play().then(() => {
+                    playBtn.innerHTML = '❚❚';
+                    vinyl.classList.add('spinning');
+                }).catch(error => {
+                    console.log("Playback failed:", error);
+                    alert("Make sure 'song1.mp3' is in the same folder!");
+                });
+            } else {
+                audio.pause();
+                playBtn.innerHTML = '▶';
+                vinyl.classList.remove('spinning');
+            }
+        }
+    </script>
+</body>
+</html>
