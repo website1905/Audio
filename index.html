@@ -35,7 +35,7 @@
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 2px solid rgba(255, 255, 255, 0.8);
-            padding: 40px 30px;
+            padding: 35px 25px;
             border-radius: 30px;
             box-shadow: 0 15px 35px rgba(255, 182, 193, 0.3);
             text-align: center;
@@ -44,11 +44,11 @@
         }
 
         .vinyl {
-            width: 120px;
-            height: 120px;
+            width: 110px;
+            height: 110px;
             background: #222;
             border-radius: 50%;
-            margin: 0 auto 25px auto;
+            margin: 0 auto 20px auto;
             position: relative;
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
             display: flex;
@@ -58,8 +58,8 @@
         }
 
         .vinyl-inner {
-            width: 40px;
-            height: 40px;
+            width: 35px;
+            height: 35px;
             background: #ffb7b2;
             border-radius: 50%;
             border: 3px dashed #fff;
@@ -75,33 +75,33 @@
         }
 
         h1 {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: #555;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: 600;
         }
 
         p {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: #888;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         .play-btn {
             background-color: #ffb7b2;
             color: #fff;
             border: none;
-            width: 65px;
-            height: 65px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             cursor: pointer;
             box-shadow: 0 6px 15px rgba(255, 183, 178, 0.5);
             transition: all 0.2s ease;
             display: inline-flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .play-btn:hover {
@@ -110,10 +110,38 @@
         }
 
         #statusText {
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             color: #e85d75;
             margin-top: 8px;
             min-height: 15px;
+        }
+
+        /* Cute fallback file upload button */
+        .upload-container {
+            margin-top: 15px;
+            border-top: 1px dashed rgba(0,0,0,0.1);
+            padding-top: 12px;
+        }
+
+        .file-label {
+            font-size: 0.75rem;
+            color: #777;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 6px 12px;
+            border-radius: 15px;
+            border: 1px solid #ffb7b2;
+            cursor: pointer;
+            display: inline-block;
+            transition: background 0.2s;
+        }
+
+        .file-label:hover {
+            background: #ffb7b2;
+            color: #fff;
+        }
+
+        input[type="file"] {
+            display: none;
         }
     </style>
 </head>
@@ -133,7 +161,15 @@
         
         <div id="statusText"></div>
 
-        <!-- Standard Audio Element pointing to your file -->
+        <!-- Backup Upload Option if GitHub blocks direct hosting -->
+        <div class="upload-container">
+            <label class="file-label">
+                📂 Choose song1.mp3 from phone
+                <input type="file" id="fileInput" accept="audio/mp3,audio/*" onchange="loadLocalFile(event)">
+            </label>
+        </div>
+
+        <!-- Audio Element -->
         <audio id="audioPlayer" src="song1.mp3" preload="auto" loop></audio>
     </div>
 
@@ -143,7 +179,6 @@
         const vinyl = document.getElementById('vinylDisc');
         const statusText = document.getElementById('statusText');
 
-        // Handles browser restrictions or missing files gracefully
         function togglePlay() {
             statusText.innerText = "";
             
@@ -153,12 +188,27 @@
                     vinyl.classList.add('spinning');
                 }).catch(err => {
                     console.error(err);
-                    statusText.innerText = "Error playing 'song1.mp3'. Check if file is uploaded properly or try converting it to standard .mp3.";
+                    statusText.innerText = "Hosting block detected! Use the button below to pick the file from your phone.";
                 });
             } else {
                 audio.pause();
                 playBtn.innerHTML = '▶';
                 vinyl.classList.remove('spinning');
+            }
+        }
+
+        // Allows direct local file selection as a foolproof backup
+        function loadLocalFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const fileURL = URL.createObjectURL(file);
+                audio.src = fileURL;
+                statusText.style.color = "#52b788";
+                statusText.innerText = "Loaded: " + file.name + " ✨";
+                audio.play().then(() => {
+                    playBtn.innerHTML = '❚❚';
+                    vinyl.classList.add('spinning');
+                });
             }
         }
     </script>
