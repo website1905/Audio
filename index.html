@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>~ lofi vibes ~</title>
-    <!-- Google Fonts for cute typography -->
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
     <style>
         * {
@@ -42,10 +41,6 @@
             text-align: center;
             width: 320px;
             transition: transform 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
         }
 
         .vinyl {
@@ -106,6 +101,7 @@
             display: inline-flex;
             justify-content: center;
             align-items: center;
+            margin-bottom: 10px;
         }
 
         .play-btn:hover {
@@ -113,27 +109,17 @@
             transform: scale(1.08);
         }
 
-        .play-btn:active {
-            transform: scale(0.95);
-        }
-
-        .sparkle {
-            position: absolute;
-            font-size: 1.2rem;
-            animation: float 3s ease-in-out infinite;
-            opacity: 0.6;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-10px) rotate(15deg); }
+        #statusText {
+            font-size: 0.75rem;
+            color: #e85d75;
+            margin-top: 8px;
+            min-height: 15px;
         }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <!-- Cute spinning vinyl art -->
         <div class="vinyl" id="vinylDisc">
             <div class="vinyl-inner"></div>
         </div>
@@ -141,12 +127,13 @@
         <h1>song1.mp3</h1>
         <p>tap to play ✨</p>
 
-        <!-- Play/Pause Button -->
         <button class="play-btn" id="playBtn" onclick="togglePlay()">
             ▶
         </button>
+        
+        <div id="statusText"></div>
 
-        <!-- Audio Element -->
+        <!-- Standard Audio Element pointing to your file -->
         <audio id="audioPlayer" src="song1.mp3" preload="auto" loop></audio>
     </div>
 
@@ -154,15 +141,19 @@
         const audio = document.getElementById('audioPlayer');
         const playBtn = document.getElementById('playBtn');
         const vinyl = document.getElementById('vinylDisc');
+        const statusText = document.getElementById('statusText');
 
+        // Handles browser restrictions or missing files gracefully
         function togglePlay() {
+            statusText.innerText = "";
+            
             if (audio.paused) {
                 audio.play().then(() => {
                     playBtn.innerHTML = '❚❚';
                     vinyl.classList.add('spinning');
-                }).catch(error => {
-                    console.log("Playback failed:", error);
-                    alert("Make sure 'song1.mp3' is in the same folder!");
+                }).catch(err => {
+                    console.error(err);
+                    statusText.innerText = "Error playing 'song1.mp3'. Check if file is uploaded properly or try converting it to standard .mp3.";
                 });
             } else {
                 audio.pause();
